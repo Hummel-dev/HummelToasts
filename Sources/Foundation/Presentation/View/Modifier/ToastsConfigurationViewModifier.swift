@@ -32,7 +32,7 @@ struct ToastsConfigurationViewModifier: ViewModifier {
         guard let windowScene, overlayWindow == nil else { return }
                         
         /// View Controller
-        let rootController = UIHostingController(rootView: EmptyView())
+        let rootController = UIHostingController(rootView: AlertPassthroughView())
         rootController.view.frame = windowScene.keyWindow?.frame ?? .zero
         rootController.view.backgroundColor = .clear
         

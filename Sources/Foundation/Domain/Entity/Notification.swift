@@ -7,4 +7,6 @@
 
 import SwiftUI
 
-public typealias Notification = Identifiable & Hashable & View
+public protocol Notification: Identifiable, Hashable, Sendable, View {
+    var id: UUID { get }
+}
