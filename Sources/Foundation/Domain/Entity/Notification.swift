@@ -7,6 +7,6 @@
 
 import SwiftUI
 
-public protocol Notification: Identifiable, Hashable, Sendable, View {
+public protocol Notification: Identifiable, Sendable, View {
     var id: UUID { get }
 }
