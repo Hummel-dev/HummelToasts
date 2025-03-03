@@ -25,6 +25,16 @@ struct AlertPassthroughView: View {
                     maxHeight: .infinity,
                     alignment: Alignment(horizontal: .center, vertical: toast.alignment)
                 )
+                .environment(
+                    \.dismissNotification,
+                     DismissNotificationAction(
+                        dismissCurrent: { [weak notificationVM] in
+                            withAnimation(toast.animation) {
+                                notificationVM?.notification = nil
+                            }
+                        }
+                     )
+                )
         }
     }
     

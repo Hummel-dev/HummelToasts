@@ -14,6 +14,8 @@ public struct Snack<Image: View, Content: View>: Toast {
     public var id = UUID()
     public var isControlGesturesActive = false
     
+    @Environment(\.dismissNotification) var dismiss
+    
     public init(
         @ViewBuilder image: () -> Image,
         @ViewBuilder content: () -> Content
@@ -28,6 +30,13 @@ public struct Snack<Image: View, Content: View>: Toast {
             
             content
                 .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Button {
+                dismiss()
+            } label: {
+                SwiftUI.Image(systemName: "xmark")
+                    .foregroundStyle(.gray)
+            }
         }
         .padding(10)
         .background(.regularMaterial, in: .rect(cornerRadius: 12))
