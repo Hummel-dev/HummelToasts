@@ -12,6 +12,7 @@ public struct Snack<Image: View, Content: View>: Toast {
     @ViewBuilder var content: Content
     
     public var id = UUID()
+    public var isControlGesturesActive = false
     
     public init(
         @ViewBuilder image: () -> Image,
