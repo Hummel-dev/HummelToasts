@@ -9,4 +9,9 @@ import SwiftUI
 
 public protocol Notification: Identifiable, Sendable, View {
     var id: UUID { get }
+    var animation: Animation { get }
+}
+
+public extension Notification {
+    var animation: Animation { .default }
 }

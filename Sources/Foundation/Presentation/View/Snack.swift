@@ -29,7 +29,14 @@ public struct Snack<Image: View, Content: View>: Toast {
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(10)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 8))
+        .background(.regularMaterial, in: .rect(cornerRadius: 12))
+        .padding()
+        .transition(
+            .asymmetric(
+                insertion: .offset(y: 100),
+                removal: .scale(scale: 0.95).combined(with: .opacity)
+            )
+        )
     }
 }
 
@@ -45,4 +52,11 @@ public struct Snack<Image: View, Content: View>: Toast {
             .font(.subheadline)
     }
     .padding()
+}
+
+#Preview("Snack Presentation") {
+    Button("Press me") {
+        HMNotification.snack("Извините. Что-то пошло не так...", role: .failure)
+    }
+    .configureToasts()
 }

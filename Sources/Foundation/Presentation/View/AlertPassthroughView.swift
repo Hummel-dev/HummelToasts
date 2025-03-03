@@ -8,9 +8,18 @@
 import SwiftUI
 
 struct AlertPassthroughView: View {
+    @ObservedObject var notificationVM = NotificationViewModel()
+    
+    var notification: (any Notification)? { notificationVM.notification }
+    
     var body: some View {
-        ZStack {
-            
+        if let toast = notification as? (any Toast) {
+            AnyView(toast)
+                .id(toast.id)
+                .frame(
+                    maxHeight: .infinity,
+                    alignment: Alignment(horizontal: .center, vertical: toast.alignment)
+                )
         }
     }
 }

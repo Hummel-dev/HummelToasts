@@ -15,6 +15,6 @@ public protocol Toast: Notification {
 
 public extension Toast {
     var alignment: VerticalAlignment { .bottom }
-    var lifetime: TimeInterval { 2 }
+    var lifetime: TimeInterval { 4 }
     var isControlGesturesActive: Bool { true }
 }
