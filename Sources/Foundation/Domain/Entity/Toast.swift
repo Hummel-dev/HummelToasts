@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-public protocol Toast: Notification {
-    var alignment: VerticalAlignment { get }
+public protocol Toast: Notification {    
     var lifetime: TimeInterval { get }
     var isControlGesturesActive: Bool { get }
 }
