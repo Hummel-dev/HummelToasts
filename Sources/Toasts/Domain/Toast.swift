@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-public protocol Toast: Notification {    
+import ToastsFoundation
+
+public protocol Toast: ToastsFoundation.Notification {    
     var lifetime: TimeInterval { get }
     var isControlGesturesActive: Bool { get }
 }

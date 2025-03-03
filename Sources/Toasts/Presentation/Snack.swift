@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import ToastsFoundation
+
 public struct Snack<Image: View, Content: View>: Toast {
     @ViewBuilder var image: Image
     @ViewBuilder var content: Content
@@ -62,11 +64,4 @@ public struct Snack<Image: View, Content: View>: Toast {
             .font(.subheadline)
     }
     .padding()
-}
-
-#Preview("Snack Presentation") {
-    Button("Press me") {
-        HMNotification.snack("Извините. Что-то пошло не так...", role: .failure)
-    }
-    .configureToasts()
 }

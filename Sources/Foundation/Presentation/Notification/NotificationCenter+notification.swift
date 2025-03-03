@@ -7,6 +7,6 @@
 
 import Foundation
 
-extension NotificationCenter {
+public extension NotificationCenter {
     static let notification = NotificationCenter()
 }

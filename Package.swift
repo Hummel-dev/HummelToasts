@@ -10,12 +10,18 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "HummelConfirmationDialogs",
-            targets: ["ToastsFoundation"]
+            name: "ToastsCore",
+            targets: ["ToastsCore"]
         ),
+        .library(
+            name: "Toasts",
+            targets: ["ToastsCore", "Toasts"]
+        )
     ],
     targets: [
         .foundation(),
+        .toasts(),
+        .core(),
     ]
 )
 
@@ -24,6 +30,26 @@ extension Target {
         .target(
             name: "ToastsFoundation",
             path: "./Sources/Foundation"
+        )
+    }
+    
+    static func toasts() -> Target {
+        .target(
+            name: "Toasts",
+            dependencies: [
+                "ToastsFoundation"
+            ]
+        )
+    }
+    
+    static func core() -> Target {
+        .target(
+            name: "ToastsCore",
+            dependencies: [
+                "ToastsFoundation",
+                "Toasts"
+            ],
+            path: "./Sources/Core"
         )
     }
 }

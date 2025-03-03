@@ -8,8 +8,13 @@
 import Combine
 import SwiftUI
 
+import ToastsFoundation
+import Toasts
+
 @MainActor
 final class NotificationViewModel: ObservableObject {
+    typealias Notification = ToastsFoundation.Notification
+    
     @Published var notification: (any Notification)?
     
     var notificationsHandlerTask: Task<Void, Never>? = nil

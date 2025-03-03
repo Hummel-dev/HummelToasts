@@ -10,7 +10,11 @@ import Foundation
 public struct DismissNotificationAction {
     var dismissCurrent: () -> Void
     
-    func callAsFunction() {
+    public init(dismissCurrent: @escaping () -> Void) {
+        self.dismissCurrent = dismissCurrent
+    }
+    
+    public func callAsFunction() {
         dismissCurrent()
     }
 }

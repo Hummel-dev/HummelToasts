@@ -7,7 +7,12 @@
 
 import SwiftUI
 
+import ToastsFoundation
+import Toasts
+
 struct AlertPassthroughView: View {
+    typealias Notification = ToastsFoundation.Notification
+    
     @GestureState var offset: CGFloat = .zero
     
     @ObservedObject var notificationVM = NotificationViewModel()
