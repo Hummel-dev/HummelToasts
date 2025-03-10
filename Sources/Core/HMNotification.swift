@@ -18,4 +18,11 @@ public struct HMNotification {
             object: notification
         )
     }
+    
+    public static func dismissAll() {
+        NotificationCenter.notification.post(
+            name: .willDisappearNotification,
+            object: nil
+        )
+    }
 }

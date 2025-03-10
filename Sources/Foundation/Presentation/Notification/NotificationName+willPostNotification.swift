@@ -8,5 +8,7 @@
 import Foundation
 
 public extension Foundation.Notification.Name {
-    static let willPostNotification = Foundation.Notification.Name("HummelToasts.willPostNotification")
+    static var willPostNotification: Foundation.Notification.Name { .init("HummelToasts.willPostNotification") }
+    static var willDisappearNotification: Foundation.Notification.Name { .init("HummelToasts.willDisappearNotification") }
+    static var didDisappearNotification: Foundation.Notification.Name { .init("HummelToasts.didDisappearNotification") }
 }

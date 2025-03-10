@@ -17,22 +17,45 @@ final class NotificationViewModel: ObservableObject {
     
     @Published var notification: (any Notification)?
     
-    var notificationsHandlerTask: Task<Void, Never>? = nil
+    var presentNotificationsHandlerTask: Task<Void, Never>? = nil
+    var dismissNotificationsHandlerTask: Task<Void, Never>? = nil
     var notificationCancelationTask: Task<Void, Error>? = nil
     var cancellable: Set<AnyCancellable> = []
     
     init() {
-        notificationsHandlerTask = Task {
+        presentNotificationsHandlerTask = Task { [weak self] in
             let center = NotificationCenter.notification
             let queue = center.notifications(named: .willPostNotification)
                 .compactMap { $0.object as? (any Notification) }
             
             for await notification in queue {
                 withAnimation(notification.animation) {
-                    self.notification = notification
+                    self?.notification = notification
                 }
             }
         }
+        
+        dismissNotificationsHandlerTask = Task { [weak self] in
+            let center = NotificationCenter.notification
+            let queue = center.notifications(named: .willDisappearNotification)
+                .map { _ in () }
+                
+            for await _ in queue {
+                guard let notification = self?.notification else { continue }
+                
+                withAnimation(notification.animation) {
+                    self?.notification = nil
+                }
+            }
+        }
+        
+        $notification
+            .dropFirst()
+            .filter { $0 == nil }
+            .sink { _ in
+                NotificationCenter.notification.post(name: .didDisappearNotification, object: nil)
+            }
+            .store(in: &cancellable)
         
         $notification
             .dropFirst()
