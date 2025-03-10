@@ -42,6 +42,23 @@ struct AlertPassthroughView: View {
                 .onAppear {
                     offset = .zero
                 }
+        } else if let notification {
+            AnyView(notification)
+                .id(notification.id)
+                .frame(
+                    maxHeight: .infinity,
+                    alignment: Alignment(horizontal: .center, vertical: notification.alignment)
+                )
+                .environment(
+                    \.dismissNotification,
+                     DismissNotificationAction(
+                        dismissCurrent: { [weak notificationVM] in
+                            withAnimation(notification.animation) {
+                                notificationVM?.notification = nil
+                            }
+                        }
+                     )
+                )
         }
     }
     

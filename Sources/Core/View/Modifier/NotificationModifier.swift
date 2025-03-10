@@ -33,7 +33,7 @@ struct NotificationModifier<Notification: ToastsFoundation.Notification>: ViewMo
                 HMNotification.custom(notification)
             }
             .onChange(of: isPresented) { newState in
-                if newState {
+                if newState {                                        
                     HMNotification.custom(notification)
                 } else {
                     HMNotification.dismissAll()
