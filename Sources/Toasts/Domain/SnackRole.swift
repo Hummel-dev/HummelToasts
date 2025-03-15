@@ -20,12 +20,15 @@ public extension SnackRole {
             case .success:
                 Image(systemName: "flame")
                     .resizable()
+                    .foregroundStyle(.green)
             case .warning:
                 Image(systemName: "exclamationmark.triangle")
                     .resizable()
+                    .foregroundStyle(.yellow)
             case .failure:
                 Image(systemName: "xmark.shield")
                     .resizable()
+                    .foregroundStyle(.red)
         }
     }
 }
