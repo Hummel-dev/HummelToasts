@@ -10,7 +10,7 @@ import SwiftUI
 import Toasts
 
 extension HMNotification {
-    public static func snack(_ content: LocalizedStringKey, role: SnackRole) {
+    public static func snack<Content: StringProtocol>(_ content: Content, role: SnackRole) {
         let snack = Snack {
             role.icon
                 .scaledToFit()
@@ -19,8 +19,7 @@ extension HMNotification {
             Text(content)
                 .font(.subheadline)
         }
-
-        
+   
         custom(snack)
     }
 }
