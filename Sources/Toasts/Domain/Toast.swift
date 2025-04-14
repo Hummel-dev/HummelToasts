@@ -18,4 +18,5 @@ public extension Toast {
     var alignment: VerticalAlignment { .bottom }
     var lifetime: TimeInterval { 4 }
     var isControlGesturesActive: Bool { true }
+    var isBackgroundDarkened: Bool { false }
 }

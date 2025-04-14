@@ -20,45 +20,53 @@ struct AlertPassthroughView: View {
     var notification: (any Notification)? { notificationVM.notification }
     
     var body: some View {
-        if let toast = notification as? (any Toast) {
-            AnyView(toast)
-                .id(toast.id)
-                .offset(y: offset)
-                .gesture(toast.isControlGesturesActive ? closingGesture(toast: toast) : nil)
-                .frame(
-                    maxHeight: .infinity,
-                    alignment: Alignment(horizontal: .center, vertical: toast.alignment)
-                )
-                .environment(
-                    \.dismissNotification,
-                     DismissNotificationAction(
-                        dismissCurrent: { [weak notificationVM] in
-                            withAnimation(toast.animation) {
-                                notificationVM?.notification = nil
+        ZStack {
+            if let notification, notification.isBackgroundDarkened {
+                Color.black
+                    .opacity(0.3)
+                    .ignoresSafeArea()
+            }
+            
+            if let toast = notification as? (any Toast) {
+                AnyView(toast)
+                    .id(toast.id)
+                    .offset(y: offset)
+                    .gesture(toast.isControlGesturesActive ? closingGesture(toast: toast) : nil)
+                    .frame(
+                        maxHeight: .infinity,
+                        alignment: Alignment(horizontal: .center, vertical: toast.alignment)
+                    )
+                    .environment(
+                        \.dismissNotification,
+                         DismissNotificationAction(
+                            dismissCurrent: { [weak notificationVM] in
+                                withAnimation(toast.animation) {
+                                    notificationVM?.notification = nil
+                                }
                             }
-                        }
-                     )
-                )
-                .onAppear {
-                    offset = .zero
-                }
-        } else if let notification {
-            AnyView(notification)
-                .id(notification.id)
-                .frame(
-                    maxHeight: .infinity,
-                    alignment: Alignment(horizontal: .center, vertical: notification.alignment)
-                )
-                .environment(
-                    \.dismissNotification,
-                     DismissNotificationAction(
-                        dismissCurrent: { [weak notificationVM] in
-                            withAnimation(notification.animation) {
-                                notificationVM?.notification = nil
+                         )
+                    )
+                    .onAppear {
+                        offset = .zero
+                    }
+            } else if let notification {
+                AnyView(notification)
+                    .id(notification.id)
+                    .frame(
+                        maxHeight: .infinity,
+                        alignment: Alignment(horizontal: .center, vertical: notification.alignment)
+                    )
+                    .environment(
+                        \.dismissNotification,
+                         DismissNotificationAction(
+                            dismissCurrent: { [weak notificationVM] in
+                                withAnimation(notification.animation) {
+                                    notificationVM?.notification = nil
+                                }
                             }
-                        }
-                     )
-                )
+                         )
+                    )
+            }
         }
     }
     

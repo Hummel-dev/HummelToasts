@@ -19,6 +19,29 @@ public extension View {
         self
             .modifier(NotificationModifier(isPresented: isPresented, notification: notification))
     }
+    
+    @ViewBuilder
+    func notification<T: Equatable, Notification: ToastsFoundation.Notification>(
+        item: Binding<T?>,
+        content: (T) -> Notification
+    ) -> some View {
+        let data = item.wrappedValue.map(content)
+        
+        if let data {
+            self
+                .modifier(
+                    NotificationModifier(
+                        isPresented: Binding(
+                            get: { item.wrappedValue != nil },
+                            set: { item.wrappedValue = $0 ? item.wrappedValue : nil }
+                        ),
+                        notification: data
+                    )
+                )
+        } else {
+            self
+        }
+    }
 }
 
 struct NotificationModifier<Notification: ToastsFoundation.Notification>: ViewModifier {
