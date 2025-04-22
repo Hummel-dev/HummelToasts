@@ -23,40 +23,58 @@ public extension View {
     @ViewBuilder
     func notification<T: Equatable, Notification: ToastsFoundation.Notification>(
         item: Binding<T?>,
-        content: (T) -> Notification
+        content: @escaping (T) -> Notification
     ) -> some View {
-        let data = item.wrappedValue.map(content)
-        
-        if let data {
-            self
-                .modifier(
-                    NotificationModifier(
-                        isPresented: Binding(
-                            get: { item.wrappedValue != nil },
-                            set: { item.wrappedValue = $0 ? item.wrappedValue : nil }
-                        ),
-                        notification: data
-                    )
-                )
-        } else {
-            self
-        }
+        self
+            .modifier(NotificationModifier(item: item, content: content))
     }
 }
 
-struct NotificationModifier<Notification: ToastsFoundation.Notification>: ViewModifier {
-    @Binding var isPresented: Bool
-    var notification: Notification
+struct NotificationModifier<Notification: ToastsFoundation.Notification, Item: Equatable>: ViewModifier {
+    @Binding var item: Optional<Item>
+    var content: (Item) -> Notification
+    
+    init(isPresented: Binding<Item>, notification: Notification) where Item == Bool {
+        self._item = Binding(
+            get: { isPresented.wrappedValue },
+            set: { isPresented.wrappedValue = $0 ?? false }
+        )
+        self.content = { _ in notification }
+    }
+    
+    init(item: Binding<Item?>, content: @escaping (Item) -> Notification) {
+        self._item = item
+        self.content = content
+    }
     
     func body(content: Content) -> some View {
         content
             .onAppear {
-                guard isPresented else { return }
+                guard let item else { return }
+                
+                let notification = self.content(item)
+                let isPresented = item as? Bool
+                
+                guard let isPresented, isPresented else { return }
                 
                 HMNotification.custom(notification)
             }
-            .onChange(of: isPresented) { newState in
-                if newState {                                        
+            .onAppear {
+                guard let item, item != nil else { return }
+                
+                let notification = self.content(item)
+                
+                HMNotification.custom(notification)
+            }
+            .onChange(of: item) { newState in
+                guard let newState else { return }
+                
+                let notification = self.content(newState)
+                let isPresented = (newState as? Bool) == true
+                let isItemPresented = (newState as? Optional<Any>) != nil
+                let isShouldPresent = isPresented || isItemPresented
+                
+                if isShouldPresent {
                     HMNotification.custom(notification)
                 } else {
                     HMNotification.dismissAll()
@@ -65,7 +83,11 @@ struct NotificationModifier<Notification: ToastsFoundation.Notification>: ViewMo
             .onReceive(
                 NotificationCenter.notification.publisher(for: .didDisappearNotification),
                 perform: { _ in
-                    isPresented = false
+                    if item is Bool {
+                        item = false as! Item
+                    } else {
+                        item = nil
+                    }
                 }
             )
     }
