@@ -34,6 +34,8 @@ struct NotificationModifier<Notification: ToastsFoundation.Notification, Item: E
     @Binding var item: Optional<Item>
     var content: (Item) -> Notification
     
+    @State var ignoreState = false
+    
     init(isPresented: Binding<Item>, notification: Notification) where Item == Bool {
         self._item = Binding(
             get: { isPresented.wrappedValue },
@@ -70,9 +72,11 @@ struct NotificationModifier<Notification: ToastsFoundation.Notification, Item: E
                 guard let newState else { return }
                 
                 let notification = self.content(newState)
-                let isPresented = (newState as? Bool) == true
-                let isItemPresented = (newState as? Optional<Any>) != nil
-                let isShouldPresent = isPresented || isItemPresented
+                let isShouldPresent = if let isPresented = item as? Bool {
+                    isPresented
+                } else {
+                    item != nil
+                }                                
                 
                 if isShouldPresent {
                     HMNotification.custom(notification)
