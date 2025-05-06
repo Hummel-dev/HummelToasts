@@ -23,7 +23,7 @@ public extension View {
     @ViewBuilder
     func notification<T: Equatable, Notification: ToastsFoundation.Notification>(
         item: Binding<T?>,
-        content: @escaping (T) -> Notification
+        @ViewBuilder content: @escaping (T) -> Notification
     ) -> some View {
         self
             .modifier(NotificationModifier(item: item, content: content))
@@ -62,6 +62,7 @@ struct NotificationModifier<Notification: ToastsFoundation.Notification, Item: E
                 HMNotification.custom(notification)
             }
             .onAppear {
+                guard !(item is Bool?) else { return }
                 guard let item, item != nil else { return }
                 
                 let notification = self.content(item)
