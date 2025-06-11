@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "HummelToasts",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v15)
     ],
@@ -49,7 +50,10 @@ extension Target {
                 "ToastsFoundation",
                 "Toasts"
             ],
-            path: "./Sources/Core"
+            path: "./Sources/Core",
+            resources: [
+                .process("./Resources/Localizable.xcstrings")
+            ]
         )
     }
 }

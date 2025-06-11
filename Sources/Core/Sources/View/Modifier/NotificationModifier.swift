@@ -63,7 +63,7 @@ struct NotificationModifier<Notification: ToastsFoundation.Notification, Item: E
             }
             .onAppear {
                 guard !(item is Bool?) else { return }
-                guard let item, item != nil else { return }
+                guard let item else { return }
                 
                 let notification = self.content(item)
                 
@@ -89,7 +89,7 @@ struct NotificationModifier<Notification: ToastsFoundation.Notification, Item: E
                 NotificationCenter.notification.publisher(for: .didDisappearNotification),
                 perform: { _ in
                     if item is Bool {
-                        item = false as! Item
+                        item = false as? Item
                     } else {
                         item = nil
                     }
@@ -102,7 +102,7 @@ struct NotificationModifier<Notification: ToastsFoundation.Notification, Item: E
 #Preview {
     @Previewable @State var isPresented: Bool = false
     
-    Button("Press me") {
+    Button("Present") {
         isPresented.toggle()
     }
     .notification(
@@ -112,7 +112,7 @@ struct NotificationModifier<Notification: ToastsFoundation.Notification, Item: E
                 .scaledToFit()
                 .frame(width: 25, height: 25)
         } content: {
-            Text("Извините. Что-то пошло не так...")
+            Text("Sorry. Something went wrong...")
                 .font(.subheadline)
         }
     )

@@ -13,9 +13,13 @@ import Toasts
 struct AlertPassthroughView: View {
     typealias Notification = ToastsFoundation.Notification
     
+    var environment: EnvironmentValues
+    
     @State var offset: CGFloat = .zero
     
     @ObservedObject var notificationVM = NotificationViewModel()
+    
+    @Environment(\.locale) var locale
     
     var notification: (any Notification)? { notificationVM.notification }
     
@@ -68,6 +72,7 @@ struct AlertPassthroughView: View {
                     )
             }
         }
+        .environment(\.self, environment)
     }
     
     func closingGesture(toast: any Toast) -> some Gesture {
@@ -85,6 +90,9 @@ struct AlertPassthroughView: View {
     }
 }
 
+@available(iOS 17.0, *)
 #Preview {
-    AlertPassthroughView()
+    @Previewable @Environment(\.self) var environment
+    
+    AlertPassthroughView(environment: environment)
 }
