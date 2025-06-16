@@ -24,7 +24,7 @@ struct AlertPassthroughView: View {
     var notification: (any Notification)? { notificationVM.notification }
     
     var body: some View {
-        ZStack {
+        Group {
             if let notification, notification.isBackgroundDarkened {
                 Color.black
                     .opacity(0.3)

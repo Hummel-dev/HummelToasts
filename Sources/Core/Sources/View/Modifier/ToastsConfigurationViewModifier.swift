@@ -10,14 +10,11 @@ import SwiftUI
 public extension View {
     @ViewBuilder
     func configureToasts() -> some View {
-        ZStack {
-            self
-            
+        background {
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
             
             if let windowScene {
                 ToastsUIWindowRepresentable(windowScene: windowScene)
-                    .ignoresSafeArea()
             }
         }
     }
@@ -26,7 +23,7 @@ public extension View {
 struct ToastsUIWindowRepresentable: UIViewRepresentable {
     var windowScene: UIWindowScene
     
-    func makeUIView(context: Context) -> PassthroughWindow {
+    func makeUIView(context: Context) -> UIView {
         let environment = context.environment
         let rootView = AlertPassthroughView(environment: environment)
         
@@ -43,11 +40,20 @@ struct ToastsUIWindowRepresentable: UIViewRepresentable {
         window.isUserInteractionEnabled = true
         window.overrideUserInterfaceStyle = .init(context.environment.colorScheme)
         
-        return window
+        context.coordinator.window = window
+        
+        let view = UIView()
+        view.backgroundColor = .clear
+        
+        return view
     }
     
-    func updateUIView(_ uiView: PassthroughWindow, context: Context) {
-        let hostingController = uiView.rootViewController as? UIHostingController<AlertPassthroughView>
+    func updateUIView(_ uiView: UIView, context: Context) {
+        let window = context.coordinator.window
+        
+        guard let window else { return }
+        
+        let hostingController = window.rootViewController as? UIHostingController<AlertPassthroughView>
         
         guard let hostingController else { return }
         
@@ -55,6 +61,14 @@ struct ToastsUIWindowRepresentable: UIViewRepresentable {
         rootView.environment = context.environment
         
         hostingController.rootView = rootView
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+    
+    final class Coordinator {
+        var window: PassthroughWindow?
     }
 }
 
