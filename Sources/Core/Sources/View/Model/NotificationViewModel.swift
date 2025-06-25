@@ -68,6 +68,8 @@ final class NotificationViewModel: ObservableObject {
                     
                     try await Task.sleep(nanoseconds: nanoseconds)
                     
+                    guard self?.notification?.id == toast.id else { return }
+                    
                     withAnimation(toast.animation) {
                         self?.notification = nil
                     }
