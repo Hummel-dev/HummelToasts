@@ -19,8 +19,6 @@ struct AlertPassthroughView: View {
     
     @ObservedObject var notificationVM = NotificationViewModel()
     
-    @Environment(\.locale) var locale
-    
     var notification: (any Notification)? { notificationVM.notification }
     
     var body: some View {

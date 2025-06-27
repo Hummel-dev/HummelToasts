@@ -10,20 +10,21 @@ import SwiftUI
 public extension View {
     @ViewBuilder
     func configureToasts() -> some View {
-        background {
-            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
-            
-            if let windowScene {
-                ToastsUIWindowRepresentable(windowScene: windowScene)
-            }
-        }
+        background(ToastsUIWindowRepresentable())
     }
 }
 
 struct ToastsUIWindowRepresentable: UIViewRepresentable {
-    var windowScene: UIWindowScene
+    @Environment(\.self) var environment
     
     func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        view.backgroundColor = .clear
+        
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        
+        guard let windowScene else { return view }
+        
         let environment = context.environment
         let rootView = AlertPassthroughView(environment: environment)
         
@@ -41,9 +42,6 @@ struct ToastsUIWindowRepresentable: UIViewRepresentable {
         window.overrideUserInterfaceStyle = .init(context.environment.colorScheme)
         
         context.coordinator.window = window
-        
-        let view = UIView()
-        view.backgroundColor = .clear
         
         return view
     }
