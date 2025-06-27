@@ -27,7 +27,7 @@ struct AlertPassthroughView: View {
         Group {
             if let notification, notification.isBackgroundDarkened {
                 Color.black
-                    .opacity(0.3)
+                    .opacity(0.5)
                     .ignoresSafeArea()
             }
             
